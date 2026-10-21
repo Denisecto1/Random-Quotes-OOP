@@ -11,14 +11,19 @@ class RandomQuote {
 
   static async getRandomQuoteViaAPI() {
     const url = 'https://quoteslate.vercel.app/api/quotes/random';
-    const options = { headers: { 'Content-Type': 'application/json' } };
+
     try {
-      const response = await fetch(url, options);
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error: ${response.status}`);
+      }
+
       const { id, quote: text, author } = await response.json();
-      // resolves promise to Quote (promise becomes "fullfilled")
+
       return new Quote(id, text, author);
     } catch (error) {
-      console.error(error);
+      console.error('Failed to fetch quote:', error);
     }
   }
 }
